@@ -5,6 +5,7 @@ class SurveillanceAuthority
     include Singleton
     @@plugins = []
 
+    # register plugins (== SurveillanceAuthority::Sanction Sub-Classes) automatically when they get defined
     def self.inherited(c)
       c.class_eval do
         include Singleton
@@ -13,9 +14,11 @@ class SurveillanceAuthority
       @@plugins << c
     end
 
+    # build a hash containing all available plugin methods
     def plugins_methods
       @plugins_methods ||= @@plugins.inject({}) do |hash, plugin_class|
         plugin_class.instance_methods(false).each do |method_name|
+          raise "plugin method name clash ... \"#{method_name}\" is defined in \"#{plugin_class.name}\" and \"#{hash[method_name.to_sym].owner.name}\"!" if hash[method_name.to_sym]
           hash[method_name.to_sym] = plugin_class.instance.method( method_name )
         end
         hash
