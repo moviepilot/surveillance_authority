@@ -1,7 +1,9 @@
 require 'singleton'
 
 class SurveillanceAuthority
-  class SurveillanceAuthority::Sanction
+
+  class Sanction
+    VALID_HOOK_METHODS = [:validation, :validation_on_create, :save, :create]
     include Singleton
     @@plugins = []
 
@@ -33,9 +35,22 @@ class SurveillanceAuthority
       end
     end
 
-    def after( observed_method ) 
-      puts "after called with #{observed_method}"
-      yield("hust")
+    def sweeper_class_name(model)
+      "Sweeper#{model}"
+    end
+        
+    [:after, :before].each do |hook|
+      define_method hook do |observed_method, &block|
+        model, method_name = observed_method.split('#')
+
+        raise "there is not observer callback called \"#{hook}_#{method_name}\"" unless VALID_HOOK_METHODS.include?(method_name.to_sym) 
+
+        # define sweeper class if it is not defined yet
+        Object.const_set(sweeper_class_name(model), Class.new) unless Object::const_defined?( sweeper_class_name(model) )
+
+        # add the observer method to our class
+        Object.send :define_method, "after_#{method_name}", lambda{|param| block.call(param) }
+      end
     end
   end
 
@@ -54,14 +69,22 @@ end
 
 class Foo < SurveillanceAuthority::Sanction
   def sweep(url, options)
-    puts "sweep(#{url}, #{options.inspect}) called"
+    puts "sweep(#{url}, #{options.inspect}) called ... and #{iamprivate} as well"
+  end
+
+  private
+
+  def iamprivate
+    "XXXXXXXXXXXXXXXXXXXX"
   end
 end
 
 SurveillanceAuthority.observe do
-  hallo "du"
-  after "hihiih" do |movie|
+  after "Movie#create" do |movie|
     hallo movie
     sweep "http://www.heise.de", :method => :delete, :foo => :bar
   end
+  puts "... calling generated stuff"
+  f = SweeperMovie.new
+  f.after_create("Jupiiiii")
 end
