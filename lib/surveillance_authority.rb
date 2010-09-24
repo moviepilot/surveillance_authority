@@ -48,33 +48,31 @@ class SurveillanceAuthority
       define_method hook do |*observed_methods, &block|
         observed_methods.each do |observed_method|
           model, method_name = observed_method.split('#')
-          observer_name = :"SurveillanceObserverFor#{model}"
+          observer_class_name = :"SurveillanceObserverFor#{model}"
           observer_method_name = :"#{hook}_#{method_name}"
 
 
           raise "there is no observer callback called \"#{hook}_#{method_name}\"" unless VALID_HOOK_METHODS.include?(method_name.to_sym) 
 
           # define sweeper class if it is not defined yet
-          unless Object.const_defined?( observer_name )
-            c = Object.const_set( observer_name, Class.new(ActionController::Caching::Sweeper) )
+          unless Object.const_defined?( observer_class_name )
+            c = Object.const_set( observer_class_name, Class.new(ActionController::Caching::Sweeper) )
             c.class_exec do
               observe model.downcase.to_sym
             end
           end  
          
-          observer_class = Object.const_get( observer_name )
+          observer_class = Object.const_get( observer_class_name )
 
-          # concat current method implementation with the current block if the method is already defined
+          # concat old method implementation with block that is passed in if the method is already defined
           if observer_class.instance_methods(false).include?( observer_method_name )
 
-            # current method implementation
-            current_method_implementation = observer_class.instance_method( observer_method_name )
+            old_implementation = observer_class.instance_method( observer_method_name )
 
             # concatenate the new block and the old implementation
             observer_class.send :define_method, observer_method_name, lambda{ |param| 
-              block.call(param)
-              old_implementation = current_method_implementation.bind(self)
-              old_implementation.call(param)
+              block.call(param) 
+              old_implementation.bind(self).call(param)
             }
           else
 
