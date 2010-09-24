@@ -42,6 +42,8 @@ class SurveillanceAuthority
 
 
 
+    # this creates the sweeper model and its methods. It creates exactly one sweeper model per observed model, regardless if you
+    # observe one or n methods from that model.
     [:after, :before].each do |hook|
       define_method hook do |*observed_methods, &block|
         observed_methods.each do |observed_method|
