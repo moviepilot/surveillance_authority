@@ -1,5 +1,6 @@
 require 'singleton'
 
+
 class SurveillanceAuthority
 
   class Sanction
@@ -35,21 +36,25 @@ class SurveillanceAuthority
       end
     end
 
-    def sweeper_class_name(model)
-      "Sweeper#{model}"
-    end
-        
     [:after, :before].each do |hook|
-      define_method hook do |observed_method, &block|
-        model, method_name = observed_method.split('#')
+      define_method hook do |*observed_methods, &block|
+        observed_methods.each do |observed_method|
+          model, method_name = observed_method.split('#')
+          observer_name = :"SurveillanceObserverFor#{model}"
 
-        raise "there is not observer callback called \"#{hook}_#{method_name}\"" unless VALID_HOOK_METHODS.include?(method_name.to_sym) 
+          raise "there is not observer callback called \"#{hook}_#{method_name}\"" unless VALID_HOOK_METHODS.include?(method_name.to_sym) 
 
-        # define sweeper class if it is not defined yet
-        Object.const_set(sweeper_class_name(model), Class.new) unless Object::const_defined?( sweeper_class_name(model) )
+          # define sweeper class if it is not defined yet
+          unless Object.const_defined?( observer_name )
+            c = Object.const_set( observer_name, Class.new(ActionController::Caching::Sweeper) )
+            c.class_exec do
+              observe model.downcase.to_sym
+            end
+          end  
 
-        # add the observer method to our class
-        Object.send :define_method, "after_#{method_name}", lambda{|param| block.call(param) }
+          # add the observer method to our class
+          Object.const_get( observer_name ).send :define_method, "#{hook}_#{method_name}", lambda{|param| block.call(param) }
+        end
       end
     end
   end
@@ -61,30 +66,30 @@ end
 
 
 
-class Bar < SurveillanceAuthority::Sanction
-  def hallo(text)
-    puts "hallo called with text: #{text}"
-  end
-end
-
-class Foo < SurveillanceAuthority::Sanction
-  def sweep(url, options)
-    puts "sweep(#{url}, #{options.inspect}) called ... and #{iamprivate} as well"
-  end
-
-  private
-
-  def iamprivate
-    "XXXXXXXXXXXXXXXXXXXX"
-  end
-end
-
-SurveillanceAuthority.observe do
-  after "Movie#create" do |movie|
-    hallo movie
-    sweep "http://www.heise.de", :method => :delete, :foo => :bar
-  end
-  puts "... calling generated stuff"
-  f = SweeperMovie.new
-  f.after_create("Jupiiiii")
-end
+#class Bar < SurveillanceAuthority::Sanction
+#  def hallo(text)
+#    puts "hallo called with text: #{text}"
+#  end
+#end
+#
+#class Foo < SurveillanceAuthority::Sanction
+#  def sweep(url, options)
+#    puts "sweep(#{url}, #{options.inspect}) called ... and #{iamprivate} as well"
+#  end
+#
+#  private
+#
+#  def iamprivate
+#    "XXXXXXXXXXXXXXXXXXXX"
+#  end
+#end
+#
+#SurveillanceAuthority.observe do
+#  after "Movie#create" do |movie|
+#    hallo movie
+#    sweep "http://www.heise.de", :method => :delete, :foo => :bar
+#  end
+#  puts "... calling generated stuff"
+#  f = SweeperMovie.new
+#  f.after_create("Jupiiiii")
+#end
