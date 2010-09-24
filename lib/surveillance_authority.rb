@@ -63,33 +63,3 @@ class SurveillanceAuthority
     SurveillanceAuthority::Sanction.instance.instance_eval(&block)
   end
 end
-
-
-
-#class Bar < SurveillanceAuthority::Sanction
-#  def hallo(text)
-#    puts "hallo called with text: #{text}"
-#  end
-#end
-#
-#class Foo < SurveillanceAuthority::Sanction
-#  def sweep(url, options)
-#    puts "sweep(#{url}, #{options.inspect}) called ... and #{iamprivate} as well"
-#  end
-#
-#  private
-#
-#  def iamprivate
-#    "XXXXXXXXXXXXXXXXXXXX"
-#  end
-#end
-#
-#SurveillanceAuthority.observe do
-#  after "Movie#create" do |movie|
-#    hallo movie
-#    sweep "http://www.heise.de", :method => :delete, :foo => :bar
-#  end
-#  puts "... calling generated stuff"
-#  f = SweeperMovie.new
-#  f.after_create("Jupiiiii")
-#end
