@@ -120,16 +120,58 @@ describe "MultipleHooksSameModelTests: multiple hooks with one specification" do
 end
 
 
+describe "MultipleHooksDifferentModelTests: multiple hooks with one specification" do
+  it "should create sweeper class" do
+    SurveillanceAuthority.observe do
+      after "MultipleHooksDifferentModelTests1_1#create", "MultipleHooksDifferentModelTests1_2#save" do
+        # hahaha ... I don't do nothing -- YOU FOOL
+      end
+    end
 
-class Notify < SurveillanceAuthority::Sanction
-  def notify(message)
-    puts message
+    Object.const_defined?(:SurveillanceObserverForMultipleHooksDifferentModelTests1_1).should be_true
+    Object.const_defined?(:SurveillanceObserverForMultipleHooksDifferentModelTests1_2).should be_true
+  end
+
+
+  it "should add the observe method with the respective class" do
+    ActionController::Caching::Sweeper.should_receive(:observe).twice
+
+    SurveillanceAuthority.observe do
+      after "MultipleHooksDifferentModelTests2_1#create", "MultipleHooksDifferentModelTests2_2#save" do
+        # hahaha ... I don't do nothing -- YOU FOOL
+      end
+    end
+
+  end
+
+  it "should create an after create hook" do
+    SurveillanceAuthority.observe do
+      after "MultipleHooksDifferentModelTests3_1#create", "MultipleHooksDifferentModelTests3_2#save" do
+        # hahaha ... I don't do nothing -- YOU FOOL
+      end
+    end
+
+    SurveillanceObserverForMultipleHooksDifferentModelTests3_1.instance_methods(false).include?(:after_create).should be_true
+    SurveillanceObserverForMultipleHooksDifferentModelTests3_2.instance_methods(false).include?(:after_save).should be_true
+  end
+
+  it "should be able to create create multiple hooks on one class" do 
+    SurveillanceAuthority.observe do
+      after "MultipleHooksDifferentModelTests4_1#create", "MultipleHooksDifferentModelTests4_2#save" do
+        # hahaha ... I don't do nothing -- YOU FOOL
+      end
+
+      before "MultipleHooksDifferentModelTests4_1#create", "MultipleHooksDifferentModelTests4_2#save" do
+        # ... me neither
+      end
+
+    end
+
+
+    SurveillanceObserverForMultipleHooksDifferentModelTests4_1.instance_methods(false).include?(:after_create).should be_true
+    SurveillanceObserverForMultipleHooksDifferentModelTests4_2.instance_methods(false).include?(:after_save).should be_true
+    SurveillanceObserverForMultipleHooksDifferentModelTests4_1.instance_methods(false).include?(:before_create).should be_true
+    SurveillanceObserverForMultipleHooksDifferentModelTests4_2.instance_methods(false).include?(:before_save).should be_true
+
   end
 end
-
-class CachingSweeper < SurveillanceAuthority::Sanction
-  def sweep(url, options)
-    # do nothing
-  end
-end
-
