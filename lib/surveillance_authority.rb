@@ -4,8 +4,9 @@ require 'singleton'
 class SurveillanceAuthority
 
   class Sanction
-    VALID_HOOK_METHODS = [:validation, :validation_on_create, :save, :create]
     include Singleton
+
+    VALID_HOOKS = [:validation, :validation_on_create, :save, :create]
     @@plugins = []
 
     # register plugins (== SurveillanceAuthority::Sanction Sub-Classes) automatically when they get defined
@@ -17,9 +18,9 @@ class SurveillanceAuthority
       @@plugins << c
     end
 
-    # build a hash containing all available plugin methods
+    # build a hash containing all available public plugin methods
     def plugins_methods
-      # caching wiht @plugins_methods ||= ... makes problems :/
+      # caching with @plugins_methods ||= ... does not work here
       @plugins_methods = @@plugins.inject({}) do |hash, plugin_class|
         plugin_class.instance_methods(false).each do |method_name|
           raise "plugin method name clash ... \"#{method_name}\" is defined in \"#{plugin_class.name}\" and \"#{hash[method_name.to_sym].owner.name}\"!" if hash[method_name.to_sym]
@@ -32,7 +33,6 @@ class SurveillanceAuthority
     def method_missing( method_name, *args )
       @plugins_methods ||= {}
 
-      # this is a weird caching optimization ... if you change this, make sure all tests run when called with rake
       if @plugins_methods[method_name.to_sym] || plugins_methods[method_name.to_sym]
         plugins_methods[method_name.to_sym].call( *args )
       else
@@ -52,7 +52,7 @@ class SurveillanceAuthority
           observer_method_name = :"#{hook}_#{method_name}"
 
 
-          raise "there is no observer callback called \"#{hook}_#{method_name}\"" unless VALID_HOOK_METHODS.include?(method_name.to_sym) 
+          raise "there is no observer callback called \"#{hook}_#{method_name}\"" unless VALID_HOOKS.include?(method_name.to_sym) 
 
           # define sweeper class if it is not defined yet
           unless Object.const_defined?( observer_class_name )
