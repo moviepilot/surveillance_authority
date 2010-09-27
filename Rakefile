@@ -13,8 +13,8 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "surveillance_authority"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Write centralized model observers in a simple DSL}
+  gem.description = %Q{Write centralized model observers in a simple DSL}
   gem.email = "github@bornkessel.com"
   gem.homepage = "http://github.com/kesselborn/surveillance_authority"
   gem.authors = ["Daniel Bornkessel"]
