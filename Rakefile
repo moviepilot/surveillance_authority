@@ -16,7 +16,7 @@ Jeweler::Tasks.new do |gem|
   gem.summary = %Q{Write centralized model observers in a simple DSL}
   gem.description = %Q{Write centralized model observers in a simple DSL}
   gem.email = "github@bornkessel.com"
-  gem.homepage = "http://github.com/kesselborn/surveillance_authority"
+  gem.homepage = "http://github.com/moviepilot/surveillance_authority"
   gem.authors = ["Daniel Bornkessel"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)

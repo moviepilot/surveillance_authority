@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
     "spec/hook_creation_spec.rb",
     "spec/method_concatenation_spec.rb",
     "spec/plugin_tests_spec.rb",
-    "spec/spec_helper.rb"
+    "spec/spec_helper.rb",
+    "surveillance_authority.gemspec"
   ]
   s.homepage = %q{http://github.com/kesselborn/surveillance_authority}
   s.require_paths = ["lib"]
