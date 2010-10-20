@@ -4,6 +4,7 @@ require 'singleton'
 class SurveillanceAuthority
 
   class Sanction
+    attr_accessor :config
     include Singleton
 
     VALID_HOOKS = [:validation, :validation_on_create, :save, :create]
@@ -83,6 +84,14 @@ class SurveillanceAuthority
         end
       end
     end
+  end
+
+  def self.config(klass, config) 
+    klass.instance.config = config
+  end
+  
+  def self.config_for(klass) 
+    klass.instance.config
   end
 
   def self.observe(&block)

@@ -12,4 +12,5 @@ group :development do
   gem "jeweler", "~> 1.5.0.pre3"
   gem "rcov", ">= 0"
   gem "reek", "~> 1.2.8"
+  gem "ruby-debug19"
 end

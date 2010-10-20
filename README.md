@@ -49,6 +49,8 @@ _surveillance_authority_ is meant to be used together with some plugins. One of 
 Writing plugins for _surveillance_authority_
 ------------------------------------------
 
+### Making methods available to _surveillance_authority_
+
 In order to write a plugin for _surveillance_authority_, simply create a class that inherits from
 
   `SurveillanceAuthority::Sanctions`
@@ -90,6 +92,57 @@ will make the sweep method available:
      end
 
 </code>
+
+### Configuration for plugins
+
+Configuring plugins should be made with the central config method provided by _surveillance_authority_. If we again use a plugin called `VarnishSweeper`, configuring this plugin should happen like this:
+
+`SurveillanceAuthority.config(VarnishSweeper, <hash with options>)`
+
+Withing your plugin, you will be able to access your options simply by calling `config`.
+
+#### Example: `VarnishSweep` needs to be configured with a base url to varnish
+
+<code>
+
+     class VarnishSweeper < SurveillanceAuthority::Sanctions
+       def sweep(url, options = {})
+         options.reverse_merge(
+           :method => :invalidate
+         }
+         
+         options[:method] == :purge ? purge_url(url) : invalidate(url)
+       end
+     
+       private
+       def varnish_base_url
+         config[:base_url]
+       end
+
+       def purge_url(url)
+         ...
+       end
+     
+       def invalidate(url)
+         ...
+       end
+     end
+
+</code>
+
+In the project using this plugin:
+
+<code>
+
+      SurveillanceAuthority.config(VarnishSweeper, :base_url => "http://varnish.example.com")
+ 
+      ...
+</code>
+
+If you want to access the config of other plugins, use:
+
+      `SurveillanceAuthority.config_for(<plugin>)`
+
 
 
 Copyright
