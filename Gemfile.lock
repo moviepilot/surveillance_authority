@@ -1,0 +1,58 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    archive-tar-minitar (0.5.2)
+    columnize (0.3.1)
+    diff-lcs (1.1.2)
+    git (1.2.5)
+    jeweler (1.5.0.pre3)
+      bundler (~> 1.0.0)
+      git (>= 1.2.5)
+      rake
+    linecache19 (0.5.11)
+      ruby_core_source (>= 0.1.4)
+    rake (0.8.7)
+    rcov (0.9.9)
+    reek (1.2.8)
+      ruby2ruby (~> 1.2)
+      ruby_parser (~> 2.0)
+      sexp_processor (~> 3.0)
+    rspec (2.0.0.beta.22)
+      rspec-core (= 2.0.0.beta.22)
+      rspec-expectations (= 2.0.0.beta.22)
+      rspec-mocks (= 2.0.0.beta.22)
+    rspec-core (2.0.0.beta.22)
+    rspec-expectations (2.0.0.beta.22)
+      diff-lcs (>= 1.1.2)
+    rspec-mocks (2.0.0.beta.22)
+      rspec-core (= 2.0.0.beta.22)
+      rspec-expectations (= 2.0.0.beta.22)
+    ruby-debug-base19 (0.11.24)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby_core_source (>= 0.1.4)
+    ruby-debug19 (0.11.6)
+      columnize (>= 0.3.1)
+      linecache19 (>= 0.5.11)
+      ruby-debug-base19 (>= 0.11.19)
+    ruby2ruby (1.2.5)
+      ruby_parser (~> 2.0)
+      sexp_processor (~> 3.0)
+    ruby_core_source (0.1.4)
+      archive-tar-minitar (>= 0.5.2)
+    ruby_parser (2.0.5)
+      sexp_processor (~> 3.0)
+    sexp_processor (3.0.5)
+    yard (0.6.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.0.0)
+  jeweler (~> 1.5.0.pre3)
+  rcov
+  reek (~> 1.2.8)
+  rspec (>= 2.0.0.beta.19)
+  ruby-debug19
+  yard (~> 0.6.0)
