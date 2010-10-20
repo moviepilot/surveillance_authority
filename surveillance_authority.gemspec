@@ -5,23 +5,23 @@
 
 Gem::Specification.new do |s|
   s.name = %q{surveillance_authority}
-  s.version = "0.0.2"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Daniel Bornkessel"]
-  s.date = %q{2010-09-27}
+  s.date = %q{2010-10-20}
   s.description = %q{Write centralized model observers in a simple DSL}
   s.email = %q{github@bornkessel.com}
   s.extra_rdoc_files = [
     "LICENSE",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     ".document",
     ".gitignore",
     "Gemfile",
     "LICENSE",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "VERSION",
     "lib/surveillance_authority.rb",
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/hook_creation_spec.rb",
     "spec/method_concatenation_spec.rb",
+    "spec/plugin_configuration_spec.rb",
     "spec/plugin_tests_spec.rb",
     "spec/spec_helper.rb"
   ]
@@ -54,6 +55,7 @@ Gem::Specification.new do |s|
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.0.pre3"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_development_dependency(%q<reek>, ["~> 1.2.8"])
+      s.add_development_dependency(%q<ruby-debug19>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 2.0.0.beta.19"])
       s.add_development_dependency(%q<yard>, ["~> 0.6.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
@@ -67,6 +69,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<jeweler>, ["~> 1.5.0.pre3"])
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<reek>, ["~> 1.2.8"])
+      s.add_dependency(%q<ruby-debug19>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 2.0.0.beta.19"])
       s.add_dependency(%q<yard>, ["~> 0.6.0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
@@ -81,6 +84,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<jeweler>, ["~> 1.5.0.pre3"])
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<reek>, ["~> 1.2.8"])
+    s.add_dependency(%q<ruby-debug19>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 2.0.0.beta.19"])
     s.add_dependency(%q<yard>, ["~> 0.6.0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
