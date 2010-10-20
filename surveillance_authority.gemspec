@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
     ".document",
     ".gitignore",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE",
     "README.md",
     "Rakefile",
@@ -28,6 +29,7 @@ Gem::Specification.new do |s|
     "spec/.rspec",
     "spec/hook_creation_spec.rb",
     "spec/method_concatenation_spec.rb",
+    "spec/plugin_configuration_spec.rb",
     "spec/plugin_tests_spec.rb",
     "spec/spec_helper.rb",
     "surveillance_authority.gemspec"
