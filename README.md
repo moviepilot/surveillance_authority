@@ -103,9 +103,10 @@ Withing your plugin, you will be able to access your options simply by calling `
 
 #### Example: `VarnishSweep` needs to be configured with a base url to varnish
 
-<code>
 
      class VarnishSweeper < SurveillanceAuthority::Sanctions
+       default_config  {:method => :purge}
+
        def sweep(url, options = {})
          options.reverse_merge(
            :method => :invalidate
@@ -128,21 +129,22 @@ Withing your plugin, you will be able to access your options simply by calling `
        end
      end
 
-</code>
 
 In the project using this plugin:
 
-<code>
 
       SurveillanceAuthority.config(VarnishSweeper, :base_url => "http://varnish.example.com")
- 
       ...
-</code>
 
 If you want to access the config of other plugins, use:
 
       `SurveillanceAuthority.config_for(<plugin>)`
 
+Note that you can easily provide default options for your plugin by calling `default_config` in your plugin file:
+
+     default_config {:method => :purge}
+
+which comes in handy if some config options of your plugin do not need to be set by the users.
 
 
 Copyright

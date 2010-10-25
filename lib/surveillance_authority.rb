@@ -4,8 +4,20 @@ require 'singleton'
 class SurveillanceAuthority
 
   class Sanction
-    attr_accessor :config
     include Singleton
+
+    def self.default_config(options = {})
+      self.instance.config = options
+    end
+
+    def config=(options = {})
+      @config ||= {}
+      @config = @config.merge(options)
+    end
+
+    def config
+      @config ||= {}
+    end
 
     VALID_HOOKS = [:validation, :validation_on_create, :save, :create]
     @@plugins = []
