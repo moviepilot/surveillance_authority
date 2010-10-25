@@ -105,7 +105,7 @@ Withing your plugin, you will be able to access your options simply by calling `
 
 
      class VarnishSweeper < SurveillanceAuthority::Sanctions
-       default_config  {:method => :purge}
+       default_config(:method => :purge)
 
        def sweep(url, options = {})
          options.reverse_merge(
@@ -142,7 +142,7 @@ If you want to access the config of other plugins, use:
 
 Note that you can easily provide default options for your plugin by calling `default_config` in your plugin file:
 
-     default_config {:method => :purge}
+     default_config(:method => :purge)
 
 which comes in handy if some config options of your plugin do not need to be set by the users.
 
