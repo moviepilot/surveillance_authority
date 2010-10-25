@@ -3,6 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
 class Notify < SurveillanceAuthority::Sanction
   default_config(:default_config => "I am a default option")
 
+  def validate_configuration
+    raise unless ["I am a default option", "I am not a default option"].include?( @config[:default_config] )
+    @config
+  end
+
   def my_config
     config
   end
@@ -41,6 +46,19 @@ describe "plugin configuration" do
     SurveillanceAuthority.config(Notify, :what => "ever")
     Notify.instance.config[:default_config].should == "I am a default option"
   end
+   
+  it "should throw an exception if we pass in an invalid option through SurveillanceAuthority.config" do
+    lambda {
+      SurveillanceAuthority.config(Notify, :default_config => "ha ha -- I am full invalid dude")
+    }.should raise_error
+  end
+
+  it "should throw an exception if we pass in an invalid option through Plugin.config = " do
+    lambda {
+      Notify.config = {:default_config => "ho ho ho -- valid I am not"}
+    }.should raise_error
+  end
+
 
   # ALWAYS LAST:
   it "should be possible for plugins to overwrite default options" do

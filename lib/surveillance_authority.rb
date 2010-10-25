@@ -8,15 +8,21 @@ class SurveillanceAuthority
 
     def self.default_config(options = {})
       self.instance.config = options
+      self.instance.validate_configuration
     end
 
     def config=(options = {})
       @config ||= {}
       @config = @config.merge(options)
+      validate_configuration
     end
 
     def config
       @config ||= {}
+    end
+
+    def validate_configuration
+      @config
     end
 
     VALID_HOOKS = [:validation, :validation_on_create, :save, :create]

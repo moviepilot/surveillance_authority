@@ -146,6 +146,25 @@ Note that you can easily provide default options for your plugin by calling `def
 
 which comes in handy if some config options of your plugin do not need to be set by the users.
 
+### Configuration Validator
+
+If your want to make sure that all configuration values of your plugin are valid, you can define a method called `validate_configuration` that does the necessary checks. It gets called after calling `default_config` and `config=` and should get called by methods that take in options that can overwrite the configuration. It should take care of the situation. If `validate_configuration` validates it should return the `@config` variable as its result gets returned when calling `config=`.
+
+     class VarnishSweeper < SurveillanceAuthority::Sanctions
+       default_config(:method => :purge)
+        
+       def validate_configuration
+         # make sure the method option is either set to :purge or :header_invalidation
+         raise "invalid config" unless [:purge, :header_invalidation].include?( @config[:method] )
+         @config
+       end
+
+       def sweep(url, options = {})
+         options = validate_configuration( self.config.merge(options) )
+         ...
+       end
+     end
+
 
 Copyright
 ---------
